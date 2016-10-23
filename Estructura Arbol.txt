@@ -1,0 +1,280 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+
+struct nodo
+{
+	int dato;
+	struct nodo *subnodo_izq;
+	struct nodo *subnodo_der;
+};
+
+int menu(void);
+void InsertarValEnArbol(struct nodo **raiz,int numero);
+void MostrarArbolPreOrden(struct nodo *raiz);
+void MostrarArbolInOrden(struct nodo *raiz);
+void MostrarArbolPostOrden(struct nodo *raiz);
+void EliminarValorEnArbol(struct nodo **raiz,int numero);
+void Eliminar_Nodo(struct nodo **raiz);
+void EliminarTodoElArbol(struct nodo **raiz);
+
+
+int main(void){
+
+	int opcion = 0;
+	int numero;
+
+	struct nodo *raiz = NULL;
+
+	while(opcion!=7){
+
+		system("cls");
+
+		opcion = menu();
+
+		switch (opcion){
+
+			case 1:
+
+				printf ("Ingrese numero que desea insertar\n");
+				scanf ("%d",&numero);
+
+				InsertarValEnArbol(&raiz,numero);
+
+			break;
+
+			case 2:
+				if (raiz != NULL){
+					MostrarArbolPreOrden(raiz);
+
+					getch();
+				}
+				else{
+					printf("\n\t\tEl arbol se encuentra vacio\n");
+
+					getch();
+				}
+			break;
+
+			case 3:
+				if (raiz != NULL){
+					MostrarArbolInOrden(raiz);
+
+					getch();
+				}
+				else{
+					printf("\n\t\tEl arbol se encuentra vacio\n");
+
+					getch();
+				}
+			break;
+
+			case 4:
+				if (raiz != NULL){
+					MostrarArbolPostOrden(raiz);
+
+					getch();
+				}
+				else{
+					printf("\n\t\tEl arbol se encuentra vacio\n");
+
+					getch();
+				}
+			break;
+
+			case 5:
+				if (raiz != NULL){
+					printf("Ingrese el numero que desea eliminar");
+					scanf("%d",&numero);
+					EliminarValorEnArbol(&raiz,numero);
+				}
+				else{
+					printf("\n\t\tEl arbol se encuentra vacio\n");
+
+					getch();
+				}
+			break;
+
+			case 6:
+				if (raiz != NULL){
+					EliminarTodoElArbol(&raiz);
+
+					printf ("\n\t\tSe ha eliminado el arbol por completo");
+				}
+				else{
+					printf("\n\t\tEl arbol se encuentra vacio\n");
+
+					getch();
+				}
+			break;
+
+		}
+
+	}
+
+	return 0;
+}
+
+
+int menu(void){
+
+	int opcion;
+
+	printf ("\n\t\t Welcome to the 'Tree Console Application\n");
+
+	printf ("\n\t\t Ingrese el numero 1 para insertar valor en el arbol");
+
+	printf ("\n\t\t Ingrese el numero 2 para ver el arbol con recorrido preorden");
+
+	printf ("\n\t\t Ingrese el numero 3 para ver el arbol con recorrido inorden");
+
+	printf ("\n\t\t Ingrese el numero 4 para ver el arbol con recorrido postorden");
+
+	printf ("\n\t\t Ingrese el numero 5 para eliminar un valor en el arbol");
+
+	printf ("\n\t\t Ingrese el numero 6 para eliminar el arbol completamente");
+
+	printf ("\n\t\t Ingrese el numero 7 para salir del programa");
+
+	scanf ("%d",&opcion);
+
+	system("cls");
+
+	return opcion;
+}
+
+
+void EliminarValorEnArbol(struct nodo **raiz,int numero){
+	struct nodo *aux;
+
+	aux = *raiz;
+
+	if (aux == NULL){
+		return;
+	}
+
+	if (aux->dato == numero){
+		if ((aux->subnodo_izq == NULL)&&(aux->subnodo_der == NULL)){
+				(*raiz) = NULL;
+				printf ("Se ha eliminado el elemento solicitado\n");
+				getch();
+				return;
+		}
+		else if((aux->subnodo_izq == NULL) && (aux->subnodo_der != NULL)){
+			Eliminar_Nodo(&aux->subnodo_der);
+			EliminarValorEnArbol(raiz,numero);
+		}
+		else if ((aux->subnodo_izq != NULL) && (aux->subnodo_der == NULL)){
+			Eliminar_Nodo(&aux->subnodo_izq);
+			EliminarValorEnArbol(raiz,numero);
+		}
+		else if ((aux->subnodo_izq != NULL)&& (aux->subnodo_der != NULL)){
+			Eliminar_Nodo(&aux->subnodo_izq);
+			Eliminar_Nodo(&aux->subnodo_der);
+			EliminarValorEnArbol(raiz,numero);
+		}
+
+	}
+	else{
+		EliminarValorEnArbol(&aux->subnodo_izq,numero);
+		EliminarValorEnArbol(&aux->subnodo_der,numero);
+		return;
+	}
+
+}
+
+void EliminarTodoElArbol(struct nodo **raiz){
+	struct nodo *aux = (*raiz);
+
+	if ((aux->subnodo_izq == NULL) && (aux->subnodo_der == NULL)){
+		(*raiz) = NULL;
+		return;
+	}	
+	else if ((aux->subnodo_izq == NULL)&&(aux->subnodo_der != NULL)){
+		EliminarTodoElArbol (&aux->subnodo_der);
+		EliminarTodoElArbol(raiz);
+	}
+	else if ((aux->subnodo_izq != NULL)&&(aux->subnodo_der == NULL)){
+		EliminarTodoElArbol(&aux->subnodo_izq);
+		EliminarTodoElArbol(raiz);
+	}
+	else if ((aux->subnodo_izq != NULL)&&(aux->subnodo_der != NULL)){
+		EliminarTodoElArbol (&aux->subnodo_izq);
+		EliminarTodoElArbol (&aux->subnodo_der);
+		EliminarTodoElArbol (raiz);
+	}
+}
+
+
+void Eliminar_Nodo(struct nodo **raiz){
+	(*raiz) = NULL;
+}
+
+
+void InsertarValEnArbol(struct nodo **raiz,int numero){
+
+	struct nodo *raizauxiliar = (*raiz);
+
+	if (raizauxiliar == NULL){
+
+		raizauxiliar = (struct nodo*)malloc(sizeof(struct nodo));
+		raizauxiliar->dato = numero;
+		raizauxiliar->subnodo_izq = NULL;
+		raizauxiliar->subnodo_der = NULL;
+
+		(*raiz) = raizauxiliar;
+
+	}
+
+	else if (raizauxiliar->dato < numero){
+		InsertarValEnArbol(&raizauxiliar->subnodo_der,numero);
+	}
+
+	else if (raizauxiliar->dato > numero){
+		InsertarValEnArbol(&raizauxiliar->subnodo_izq,numero);
+	}
+	else{
+		printf("El dato ya se ha ingresado una vez.\n");	
+		getch();
+	}
+
+}
+
+void MostrarArbolPreOrden(struct nodo *raiz){
+
+	//Primero hacemos un recorrido Preorden del arbol.
+	if (raiz == NULL){
+		return;
+	}
+		printf("Numero : %d \n",raiz->dato );
+		MostrarArbolPreOrden(raiz->subnodo_izq);
+		MostrarArbolPreOrden(raiz->subnodo_der);
+
+}
+
+void MostrarArbolInOrden(struct nodo *raiz){
+
+	//Primero hacemos un recorrido Preorden del arbol.
+	if (raiz == NULL){
+		return;
+	}
+		MostrarArbolInOrden(raiz->subnodo_izq);
+		printf("Numero : %d \n",raiz->dato );
+		MostrarArbolInOrden(raiz->subnodo_der);
+
+}
+
+
+void MostrarArbolPostOrden(struct nodo *raiz){
+
+	//Primero hacemos un recorrido Preorden del arbol.
+	if (raiz == NULL){
+		return;
+	}
+		MostrarArbolPostOrden(raiz->subnodo_izq);
+		MostrarArbolPostOrden(raiz->subnodo_der);
+		printf("Numero : %d \n",raiz->dato );
+
+}
+
