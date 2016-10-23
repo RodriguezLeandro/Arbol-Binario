@@ -243,7 +243,7 @@ void InsertarValEnArbol(struct nodo **raiz,int numero){
 
 void MostrarArbolPreOrden(struct nodo *raiz){
 
-	//Primero hacemos un recorrido Preorden del arbol.
+	//Hacemos un recorrido Preorden del arbol.
 	if (raiz == NULL){
 		return;
 	}
@@ -255,7 +255,7 @@ void MostrarArbolPreOrden(struct nodo *raiz){
 
 void MostrarArbolInOrden(struct nodo *raiz){
 
-	//Primero hacemos un recorrido Preorden del arbol.
+	//Hacemos un recorrido Inorden del arbol.
 	if (raiz == NULL){
 		return;
 	}
@@ -268,7 +268,7 @@ void MostrarArbolInOrden(struct nodo *raiz){
 
 void MostrarArbolPostOrden(struct nodo *raiz){
 
-	//Primero hacemos un recorrido Preorden del arbol.
+	//Hacemos un recorrido Postorden del arbol.
 	if (raiz == NULL){
 		return;
 	}
